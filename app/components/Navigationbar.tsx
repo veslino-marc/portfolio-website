@@ -2,11 +2,12 @@
 
 import { assets } from "@/public/assets/assets";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useDarkMode } from "../context/DarkModeContext";
 
 const Navigationbar = () => {
   const sideMenuRef = useRef<HTMLUListElement>(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const toggleOpenSideMenu = () => {
     if (sideMenuRef.current) {
@@ -22,11 +23,6 @@ const Navigationbar = () => {
     }
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark");
-  };
-
   return (
     <>
       <div className="fixed top-0 right-0 w-11/12 -z-10 overflow-hidden">
@@ -39,14 +35,12 @@ const Navigationbar = () => {
         />
       </div>
       <nav className="w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50">
-        <a href="#top">
-          <Image
-            src={assets.logo}
-            alt="Logo"
-            className="w-28 cursor-pointer"
-            width={112}
-            height={40}
-          />
+        <a href="#top" className="flex items-center gap-2 group">
+          <div className="text-2xl font-bold text-black flex items-center">
+            <span className="text-gray-400">&lt;</span>
+            <span className="group-hover:text-blue-600 transition-colors">MV</span>
+            <span className="text-gray-400">/&gt;</span>
+          </div>
         </a>
 
         <ul className="hidden md:flex items-center gap-6 lg:gap-8 rounded-full px-12 py-3 text-sm bg-white shadow-sm bg-opacity-50">
