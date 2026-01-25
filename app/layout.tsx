@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Marc Vesliño | Portfolio",
+  title: "Marc | Portfolio",
   description: "Frontend web developer specializing in Angular, React, Next.js, and Spring Boot. 3rd year IT student at PUP-Taguig building modern web and mobile applications.",
   keywords: [
     "Marc Vesliño",

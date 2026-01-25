@@ -38,7 +38,7 @@ const projectsData: Project[] = [
       "Track quiz scores and improvement over time",
       "Share study sets and collaborate with community",
       "Public & private study sets with full control",
-      "Question suggestions from community",
+      "AI Question suggestions",
       "Real-time notifications for study activity",
     ],
     technologies: ["Angular", "TypeScript", "Spring Boot", "Java", "MySQL", "VPS Hostinger"],
