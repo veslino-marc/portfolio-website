@@ -34,7 +34,7 @@ const Contact = () => {
           Accept: "application/json",
         },
         body: JSON.stringify({
-          access_key: "88d778f4-0ec1-472d-a750-39340213df6e",
+          access_key: process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY,
           name: formData.name,
           email: formData.email,
           message: formData.message,
@@ -119,9 +119,9 @@ const Contact = () => {
               <Image
                 src={assets.right_arrow_white}
                 alt="Arrow"
-                className="w-4"
                 width={16}
                 height={16}
+                style={{ width: '1rem', height: 'auto' }}
               />
             </button>
             
@@ -143,7 +143,7 @@ const Contact = () => {
               <span className="text-gray-400 text-2xl">/&gt;</span>
             </h3>
           </div>
-          <p className="text-gray-600 text-sm mb-4">Full-Stack Developer</p>
+          <p className="text-gray-600 text-sm mb-4">Frontend Web Developer</p>
           <a
             href="mailto:marcveslino000@gmail.com"
             className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-6"
@@ -151,9 +151,9 @@ const Contact = () => {
             <Image
               src={assets.mail_icon}
               alt="Email"
-              className="w-5"
               width={20}
               height={20}
+              style={{ width: '1.25rem', height: 'auto' }}
             />
             marcveslino000@gmail.com
           </a>
@@ -194,10 +194,10 @@ const Contact = () => {
           <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-600 pt-8 border-t border-gray-300">
             <p>© 2026 Marc Vesliño. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-black transition-colors">
+              <a href="/terms" className="hover:text-black transition-colors">
                 Terms of Services
               </a>
-              <a href="#" className="hover:text-black transition-colors">
+              <a href="/privacy" className="hover:text-black transition-colors">
                 Privacy Policy
               </a>
               <a 

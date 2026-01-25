@@ -3,11 +3,9 @@
 import { assets } from "@/public/assets/assets";
 import Image from "next/image";
 import { useRef } from "react";
-import { useDarkMode } from "../context/DarkModeContext";
 
 const Navigationbar = () => {
   const sideMenuRef = useRef<HTMLUListElement>(null);
-  const { isDarkMode, toggleDarkMode } = useDarkMode();
 
   const toggleOpenSideMenu = () => {
     if (sideMenuRef.current) {
@@ -32,6 +30,7 @@ const Navigationbar = () => {
           className="w-full -translate-y-1/2"
           width={1920}
           height={400}
+          priority
         />
       </div>
       <nav className="w-full fixed px-5 lg:px-8 xl:px-[8%] py-4 flex items-center justify-between z-50">
@@ -80,7 +79,7 @@ const Navigationbar = () => {
               className="hover:scale-110 transition-transform duration-300 block"
             >
               <Image
-                src={isDarkMode ? assets.github_invertocat_white : assets.github_invertocat_black}
+                src={assets.github_invertocat_black}
                 alt="GitHub"
                 className="w-5"
                 width={20}
@@ -97,28 +96,13 @@ const Navigationbar = () => {
               className="hover:scale-110 transition-transform duration-300 block"
             >
               <Image
-                src={isDarkMode ? assets.linkedin_logo_white : assets.linkedin_logo_black}
+                src={assets.linkedin_logo_black}
                 alt="LinkedIn"
                 className="w-5"
                 width={20}
                 height={20}
               />
             </a>
-          </li>
-          
-          <li>
-            <button 
-              onClick={toggleDarkMode}
-              className="cursor-pointer hover:scale-110 active:scale-95 transition-transform duration-300"
-            >
-              <Image
-                src={isDarkMode ? assets.sun_icon : assets.moon_icon}
-                alt={isDarkMode ? "Light mode" : "Dark mode"}
-                className="w-5"
-                width={20}
-                height={20}
-              />
-            </button>
           </li>
         </ul>
         
@@ -131,9 +115,9 @@ const Navigationbar = () => {
             <Image
               src={assets.arrow_icon}
               alt="Arrow icon"
-              className="w-3"
               width={12}
               height={12}
+              style={{ width: '0.75rem', height: 'auto' }}
             />
           </a>
           
@@ -141,9 +125,9 @@ const Navigationbar = () => {
             <Image
               src={assets.menu_black}
               alt="Menu Black"
-              className="w-6"
               width={24}
               height={24}
+              style={{ width: '1.5rem', height: 'auto' }}
             />
           </button>
         </div>
@@ -152,13 +136,13 @@ const Navigationbar = () => {
           ref={sideMenuRef}
           className="flex md:hidden flex-col gap-4 py-20 px-10 fixed -right-64 top-0 bottom-0 w-64 z-50 h-screen bg-rose-50 transition duration-500"
         >
-          <div className="absolute right-6 top-6" onClick={toggleCloseSideMenu}>
+          <div className="absolute right-6 top-6 cursor-pointer" onClick={toggleCloseSideMenu}>
             <Image
               src={assets.close_black}
               alt="Close Black"
-              className="w-5 cursor-pointer"
               width={20}
               height={20}
+              style={{ width: '1.25rem', height: 'auto' }}
             />
           </div>
           <li>
@@ -197,7 +181,7 @@ const Navigationbar = () => {
               className="hover:scale-110 transition-transform duration-300"
             >
               <Image
-                src={isDarkMode ? assets.github_invertocat_white : assets.github_invertocat_black}
+                src={assets.github_invertocat_black}
                 alt="GitHub"
                 className="w-6"
                 width={24}
@@ -212,26 +196,13 @@ const Navigationbar = () => {
               className="hover:scale-110 transition-transform duration-300"
             >
               <Image
-                src={isDarkMode ? assets.linkedin_logo_white : assets.linkedin_logo_black}
+                src={assets.linkedin_logo_black}
                 alt="LinkedIn"
                 className="w-6"
                 width={24}
                 height={24}
               />
             </a>
-            
-            <button 
-              onClick={toggleDarkMode}
-              className="cursor-pointer hover:scale-110 active:scale-95 transition-transform duration-300"
-            >
-              <Image
-                src={isDarkMode ? assets.sun_icon : assets.moon_icon}
-                alt={isDarkMode ? "Light mode" : "Dark mode"}
-                className="w-6"
-                width={24}
-                height={24}
-              />
-            </button>
           </li>
         </ul>
       </nav>
