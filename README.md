@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Marc Vesliño - Portfolio Website
 
-## Getting Started
+A modern, responsive portfolio website showcasing my projects, skills, and experience as a Frontend Web Developer.
 
-First, run the development server:
+🔗 **Live Site:** [https://portfolio-website-marcveslino.vercel.app/](https://portfolio-website-marcveslino.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- **Responsive Design** - Fully responsive across all devices
+- **Modern UI/UX** - Clean, professional interface with smooth animations
+- **Interactive Project Showcase** - Modal-based project gallery with image carousels
+- **Animated Particles Background** - Dynamic geometric particles in header section
+- **Scroll Animations** - Smooth fade-in animations as you scroll through sections
+- **Contact Form** - Integrated with Web3Forms for email submissions
+- **SEO Optimized** - Comprehensive metadata and Open Graph tags
+- **Performance Optimized** - Fast loading with Next.js Image optimization
+
+## Tech Stack
+
+- **Framework:** Next.js 15 (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS
+- **Deployment:** Vercel
+- **Form Handling:** Web3Forms API
+- **Version Control:** Git/GitHub
+
+## Sections
+
+1. **Header** - Introduction with animated particles background
+2. **About Me** - Timeline of my journey and background
+3. **Projects** - Showcase of 6 major projects with detailed modals
+4. **Skills** - Technologies and tools I work with
+5. **Contact** - Contact form and social links
+
+## Projects Featured
+
+- **MindStack** - AI-powered learning platform (Angular, Spring Boot, MySQL)
+- **SpendSense** - Smart budgeting mobile app (Android, Kotlin)
+- **Blinders Vault** - Secure banking system (HTML, CSS, JavaScript, PHP)
+- **Eventure** - Event management system (Java, SQL Server)
+- **YouthConnect** - SK governance platform (Angular, Spring Boot, MySQL)
+- **SmileSync** - Dental appointment system (C++)
+
+## Project Structure
+
+```
+portfolio-website/
+├── app/
+│   ├── components/       # React components
+│   ├── hooks/           # Custom React hooks
+│   ├── privacy/         # Privacy policy page
+│   ├── terms/           # Terms of service page
+│   ├── globals.css      # Global styles
+│   ├── layout.tsx       # Root layout
+│   └── page.tsx         # Home page
+├── public/
+│   ├── assets/          # Images and icons
+│   └── Resume.pdf       # Downloadable resume
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contact
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Email:** marcveslino000@gmail.com
+- **LinkedIn:** [linkedin.com/in/marcvesliño](https://www.linkedin.com/in/marcvesliño/)
+- **GitHub:** [github.com/veslino-marc](https://github.com/veslino-marc)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ by Marc Vesliño
