@@ -315,7 +315,8 @@ const Projects = () => {
                       alt={`${selectedProject.title} screenshot ${currentImageIndex + 1}`}
                       fill
                       sizes="(max-width: 768px) 100vw, 60vw"
-                      className="object-contain transition-opacity duration-300"
+                      className="object-contain transition-opacity duration-500 ease-in-out"
+                      style={{ opacity: 1 }}
                     />
                   </div>
                   
@@ -324,7 +325,7 @@ const Projects = () => {
                     <>
                       <button
                         onClick={prevImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 rounded-full p-2 transition-all shadow-lg z-10 hover:scale-110"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 rounded-full p-2 transition-all shadow-lg z-10 hover:scale-110 cursor-pointer"
                       >
                         <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -332,7 +333,7 @@ const Projects = () => {
                       </button>
                       <button
                         onClick={nextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 rounded-full p-2 transition-all shadow-lg z-10 hover:scale-110"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white hover:bg-gray-100 rounded-full p-2 transition-all shadow-lg z-10 hover:scale-110 cursor-pointer"
                       >
                         <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
