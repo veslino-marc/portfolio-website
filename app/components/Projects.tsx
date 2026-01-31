@@ -96,7 +96,7 @@ const projectsData: Project[] = [
     id: "eventure",
     title: "Eventure",
     description: "Complete event management with real-time tracking",
-    type: "Web App",
+    type: "Desktop App",
     thumbnail: "/assets/projects/eventure-landing.png",
     images: [
       "/assets/projects/eventure-landing.png",
@@ -380,8 +380,8 @@ const Projects = () => {
                   <h5 className="text-sm font-semibold text-black mb-2">Key Features:</h5>
                   <ul className="space-y-1">
                     {selectedProject.features.map((feature, index) => (
-                      <li key={index} className="text-gray-700 text-sm flex items-start gap-2">
-                        <span className="text-blue-600 mt-1">•</span>
+                      <li key={index} className="text-gray-700 text-sm flex items-center gap-2">
+                        <span className="text-blue-600">•</span>
                         <span>{feature}</span>
                       </li>
                     ))}

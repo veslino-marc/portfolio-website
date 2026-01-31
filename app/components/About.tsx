@@ -71,8 +71,8 @@ const About = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm">
-                      3rd year IT student, polishing development skills and 
-                      building projects with modern tech stacks
+                      3rd year IT student, polishing development skills and building projects with modern 
+                      tech stacks like React, Next.js, and Tailwind CSS.
                     </p>
                   </div>
                 </div>
@@ -92,8 +92,7 @@ const About = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm">
-                      Built a web-based learning platform using TypeScript and 
-                      Springboot. And now learning Next.js, React, and Tailwind
+                      Developed MindStack, an AI-powered learning platform with Angular and Spring Boot, featuring custom flashcards, quizzes, and community collaboration across 14 agile sprints.
                     </p>
                   </div>
                 </div>
@@ -113,9 +112,7 @@ const About = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm">
-                      Developed a secure web-based banking app project with 
-                      deposits, withdrawals, fund transfers, and OTP 
-                      verification
+                      Built Blinders Vault, a secure banking system with dual interfaces for tellers and account holders, implementing OTP verification and real-time transaction processing.
                     </p>
                   </div>
                 </div>
@@ -135,7 +132,7 @@ const About = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm">
-                      Learned C++ and Python, expanding programming knowledge
+                      Expanded programming expertise by learning C++ and Python, building desktop applications.
                     </p>
                   </div>
                 </div>
@@ -155,7 +152,7 @@ const About = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm">
-                      Started learning Java programming
+                      Began Java programming journey, learning fundamentals and building foundational skills in development.
                     </p>
                   </div>
                 </div>
@@ -174,8 +171,7 @@ const About = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 text-sm">
-                      Wrote my first line of code with HTML, CSS, and 
-                      JavaScript
+                      Wrote my first "Hello World!" and discovered my passion for web development through HTML, CSS, and JavaScript fundamentals.
                     </p>
                   </div>
                 </div>
