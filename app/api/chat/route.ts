@@ -22,11 +22,33 @@ export async function POST(request: NextRequest) {
             .from('conversations')
             .select('*')
             .eq('user_id', userId)
-            .eq('status', 'active')
+            .in('status', ['active', 'human_active', 'waiting_human'])
             .single();
 
         if (existingConv) {
             conversation = existingConv;
+
+            // If human is active, send user message to Telegram immediately
+            if (conversation.status === 'human_active') {
+                await sendUserMessageToTelegram(conversation.id, userName, message);
+
+                // Don't generate AI response, just save the message and return
+                await supabaseAdmin
+                    .from('messages')
+                    .insert({
+                        conversation_id: conversation.id,
+                        sender_type: 'user',
+                        message: message
+                    });
+
+                return NextResponse.json({
+                    success: true,
+                    response: "Marc will respond to you shortly...",
+                    conversationId: conversation.id,
+                    humanActive: true
+                });
+            }
+
             // Update message count
             await supabaseAdmin
                 .from('conversations')
@@ -183,3 +205,32 @@ export async function POST(request: NextRequest) {
     }
 }
 
+
+// Helper function to send user messages to Telegram when human is active
+async function sendUserMessageToTelegram(conversationId: string, userName: string, message: string) {
+    try {
+        const TelegramBot = (await import('node-telegram-bot-api')).default;
+        const token = process.env.TELEGRAM_BOT_TOKEN!;
+        const chatId = process.env.TELEGRAM_CHAT_ID!;
+        const bot = new TelegramBot(token);
+
+        const notification = `
+💬 *New message from ${userName}*
+
+"${message}"
+
+🆔 Conversation: \`${conversationId}\`
+
+_Reply to continue the conversation_
+`;
+
+        await bot.sendMessage(chatId, notification, {
+            parse_mode: 'Markdown',
+            disable_web_page_preview: true
+        });
+
+        console.log('✅ User message sent to Telegram');
+    } catch (error) {
+        console.error('❌ Error sending user message to Telegram:', error);
+    }
+}
