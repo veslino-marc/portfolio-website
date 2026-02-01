@@ -37,6 +37,8 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [lastPollTime, setLastPollTime] = useState<string | null>(null);
+  const [humanTookOver, setHumanTookOver] = useState(false);
+  const [isHumanTyping, setIsHumanTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,16 +57,34 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
 
         const data = await response.json();
 
-        if (data.newMessages && data.newMessages.length > 0) {
-          // Add new human messages to the chat
-          const humanMessages: ChatMessage[] = data.newMessages.map((msg: any) => ({
-            role: 'assistant',
-            content: `👨‍💼 Marc: ${msg.message}`,
-            timestamp: new Date().toISOString() // Use current time instead of DB timestamp
-          }));
+        // Check if human took over
+        if (data.conversationStatus === 'human_active' && !humanTookOver) {
+          setHumanTookOver(true);
+          // Show takeover notification
+          const takeoverMessage: ChatMessage = {
+            role: 'system',
+            content: '🎉 Great news! Marc is now personally handling your conversation.',
+            timestamp: new Date().toISOString()
+          };
+          setMessages(prev => [...prev, takeoverMessage]);
+        }
 
-          setMessages(prev => [...prev, ...humanMessages]);
-          setLastPollTime(data.newMessages[data.newMessages.length - 1].created_at);
+        if (data.newMessages && data.newMessages.length > 0) {
+          // Show typing indicator briefly
+          setIsHumanTyping(true);
+          
+          setTimeout(() => {
+            // Add new human messages to the chat
+            const humanMessages: ChatMessage[] = data.newMessages.map((msg: any) => ({
+              role: 'human',
+              content: msg.message,
+              timestamp: new Date().toISOString()
+            }));
+
+            setMessages(prev => [...prev, ...humanMessages]);
+            setLastPollTime(data.newMessages[data.newMessages.length - 1].created_at);
+            setIsHumanTyping(false);
+          }, 1000); // Show typing for 1 second
         }
       } catch (error) {
         console.error('Polling error:', error);
@@ -72,7 +92,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
     }, 3000); // Poll every 3 seconds
 
     return () => clearInterval(pollInterval);
-  }, [userId, lastPollTime]);
+  }, [userId, lastPollTime, humanTookOver]);
 
   // Load conversation history on mount
   useEffect(() => {
@@ -260,42 +280,131 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}
-          >
-            <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} max-w-[85%]`}>
-              <div
-                className={`group relative p-3 rounded-2xl shadow-sm ${
-                  msg.role === 'user'
-                    ? 'bg-gradient-to-br from-gray-900 to-black text-white rounded-br-none'
-                    : 'bg-white text-gray-800 rounded-bl-none border border-gray-200'
-                }`}
-              >
-                <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
-                
-                {/* Copy button */}
-                <button
-                  onClick={() => copyMessage(msg.content, index)}
-                  className={`absolute -top-2 ${msg.role === 'user' ? '-left-2' : '-right-2'} opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600`}
-                  title="Copy message"
-                >
-                  {copiedIndex === index ? (
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  ) : (
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                    </svg>
-                  )}
-                </button>
+        {messages.map((msg, index) => {
+          // System messages (takeover notification)
+          if (msg.role === 'system') {
+            return (
+              <div key={index} className="flex justify-center animate-fadeIn">
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 text-blue-800 px-4 py-3 rounded-xl shadow-sm max-w-[90%] text-center">
+                  <p className="text-sm font-medium">{msg.content}</p>
+                </div>
               </div>
-              <span className="text-xs text-gray-400 mt-1 px-2">{formatTime(msg.timestamp)}</span>
+            );
+          }
+
+          // Human messages (from you via Telegram)
+          if (msg.role === 'human') {
+            return (
+              <div key={index} className="flex justify-start animate-fadeIn">
+                <div className="flex flex-col items-start max-w-[85%]">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-purple-300">
+                      <Image
+                        src="/android-chrome-512x512.png"
+                        alt="Marc"
+                        width={24}
+                        height={24}
+                        className="object-cover"
+                      />
+                    </div>
+                    <span className="text-xs font-semibold text-purple-700 flex items-center gap-1">
+                      Marc Vesliño
+                      <svg className="w-3 h-3 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div className="group relative p-3 rounded-2xl rounded-tl-none shadow-md bg-gradient-to-br from-amber-50 via-rose-50 to-purple-100 text-gray-900 border border-purple-200">
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
+                    
+                    {/* Copy button */}
+                    <button
+                      onClick={() => copyMessage(msg.content, index)}
+                      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600"
+                      title="Copy message"
+                    >
+                      {copiedIndex === index ? (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  <span className="text-xs text-gray-400 mt-1 px-2">{formatTime(msg.timestamp)}</span>
+                </div>
+              </div>
+            );
+          }
+
+          // Regular messages (user and AI)
+          return (
+            <div
+              key={index}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-fadeIn`}
+            >
+              <div className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} max-w-[85%]`}>
+                <div
+                  className={`group relative p-3 rounded-2xl shadow-sm ${
+                    msg.role === 'user'
+                      ? 'bg-gradient-to-br from-gray-900 to-black text-white rounded-br-none'
+                      : 'bg-white text-gray-800 rounded-bl-none border border-gray-200'
+                  }`}
+                >
+                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
+                  
+                  {/* Copy button */}
+                  <button
+                    onClick={() => copyMessage(msg.content, index)}
+                    className={`absolute -top-2 ${msg.role === 'user' ? '-left-2' : '-right-2'} opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600`}
+                    title="Copy message"
+                  >
+                    {copiedIndex === index ? (
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                <span className="text-xs text-gray-400 mt-1 px-2">{formatTime(msg.timestamp)}</span>
+              </div>
+            </div>
+          );
+        })}
+        
+        {/* Human Typing Indicator */}
+        {isHumanTyping && (
+          <div className="flex justify-start animate-fadeIn">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-purple-300">
+                <Image
+                  src="/android-chrome-512x512.png"
+                  alt="Marc"
+                  width={24}
+                  height={24}
+                  className="object-cover"
+                />
+              </div>
+              <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-100 border border-purple-200 px-4 py-3 rounded-2xl rounded-tl-none shadow-md">
+                <div className="flex gap-1.5 items-center">
+                  <span className="text-xs font-medium mr-2 text-gray-900">Marc is typing</span>
+                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                </div>
+              </div>
             </div>
           </div>
-        ))}
+        )}
+        
+        {/* AI Loading Indicator */}
         {isLoading && (
           <div className="flex justify-start animate-fadeIn">
             <div className="bg-white border border-gray-200 p-4 rounded-2xl rounded-bl-none shadow-sm">

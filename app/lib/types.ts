@@ -29,7 +29,7 @@ export interface TelegramNotification {
 }
 
 export interface ChatMessage {
-    role: 'user' | 'assistant';
+    role: 'user' | 'assistant' | 'human' | 'system';
     content: string;
     timestamp: string;
 }
