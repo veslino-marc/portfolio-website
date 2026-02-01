@@ -232,20 +232,51 @@ async function handleDirectReply(message: any) {
         console.log('📝 Reply text:', replyText);
         console.log('📄 Original message:', originalMessage);
 
-        // Extract conversation ID from the original message
-        const match = originalMessage.match(/Conversation ID: `([^`]+)`/);
+        // Try to extract conversation ID from the original message
+        let conversationId: string | null = null;
 
-        if (!match) {
-            console.log('⚠️ Could not extract conversation ID from message');
+        // Method 1: Look for "Conversation ID: `xxx`" pattern
+        let match = originalMessage.match(/Conversation ID: `([^`]+)`/);
+        if (match) {
+            conversationId = match[1];
+        }
+
+        // Method 2: Look for "🆔 Conversation: `xxx`" pattern (from escalation notifications)
+        if (!conversationId) {
+            match = originalMessage.match(/🆔 Conversation: `([^`]+)`/);
+            if (match) {
+                conversationId = match[1];
+            }
+        }
+
+        // Method 3: Get the most recent escalated conversation for this chat
+        if (!conversationId) {
+            console.log('⚠️ Could not extract conversation ID from message, trying to find recent escalation');
+            const { data: recentConv } = await supabaseAdmin
+                .from('conversations')
+                .select('id')
+                .eq('escalated', true)
+                .in('status', ['waiting_human', 'human_active'])
+                .order('updated_at', { ascending: false })
+                .limit(1)
+                .single();
+
+            if (recentConv) {
+                conversationId = recentConv.id;
+                console.log('✅ Found recent conversation:', conversationId);
+            }
+        }
+
+        if (!conversationId) {
+            console.log('❌ Could not find conversation ID');
             await bot.sendMessage(
                 chatId,
-                '❌ Could not find conversation ID. Please use the buttons to respond.',
+                '❌ Could not find conversation. Please click "Take Over" button first, then reply to the instruction message.',
                 { reply_to_message_id: message.message_id }
             );
             return;
         }
 
-        const conversationId = match[1];
         console.log('🆔 Conversation ID:', conversationId);
 
         // Check if conversation exists and is active
