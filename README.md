@@ -186,6 +186,35 @@ The chatbot automatically escalates to Telegram when:
 - Handles 6 projects comprehensively
 - Detects hiring/collaboration opportunities
 
+## 🧪 Testing Telegram Buttons
+
+### Quick Test Commands
+
+```bash
+# Check webhook status
+npx tsx scripts/check-webhook-status.ts
+
+# Send test message with all buttons
+npx tsx scripts/test-telegram-buttons.ts
+
+# Setup/reset webhook
+npx tsx scripts/setup-telegram-webhook.ts
+```
+
+### Testing Guide
+See `documentation/TELEGRAM_BUTTON_TEST_GUIDE.md` for:
+- Step-by-step button testing
+- Expected behavior for each button
+- Troubleshooting tips
+- What's implemented vs. not implemented
+
+### Debugging
+See `documentation/VERCEL_LOGS_GUIDE.md` for:
+- How to access Vercel logs
+- What to look for in logs
+- Common errors and solutions
+- Real-time monitoring tips
+
 ## 📚 Documentation
 
 Detailed documentation available in the `documentation/` folder:
@@ -194,6 +223,8 @@ Detailed documentation available in the `documentation/` folder:
 - `DEPLOYMENT_CHECKLIST.md` - Deployment steps
 - `SYSTEM_FLOW.md` - System architecture
 - `CHATBOT_UI_ENHANCEMENTS.md` - UI/UX improvements
+- `TELEGRAM_BUTTON_TEST_GUIDE.md` - Button testing guide
+- `VERCEL_LOGS_GUIDE.md` - Debugging with logs
 
 ## 🔧 Configuration
 

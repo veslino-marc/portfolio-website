@@ -1,6 +1,12 @@
 // Script to setup Telegram webhook
 // Run with: npx tsx scripts/setup-telegram-webhook.ts
 
+import { config } from 'dotenv';
+import { resolve } from 'path';
+
+// Load environment variables from .env.local
+config({ path: resolve(process.cwd(), '.env.local') });
+
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const WEBHOOK_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://portfolio-website-marcveslino.vercel.app';
 
