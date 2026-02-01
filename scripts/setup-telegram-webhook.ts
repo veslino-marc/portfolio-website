@@ -2,7 +2,7 @@
 // Run with: npx tsx scripts/setup-telegram-webhook.ts
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const WEBHOOK_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://your-domain.vercel.app';
+const WEBHOOK_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://portfolio-website-marcveslino.vercel.app';
 
 async function setupWebhook() {
     if (!TELEGRAM_BOT_TOKEN) {
