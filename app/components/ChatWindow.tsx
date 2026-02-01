@@ -36,8 +36,43 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [lastPollTime, setLastPollTime] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Poll for new human messages every 3 seconds
+  useEffect(() => {
+    const pollInterval = setInterval(async () => {
+      try {
+        const response = await fetch('/api/chat/poll', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            lastMessageTime: lastPollTime
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.newMessages && data.newMessages.length > 0) {
+          // Add new human messages to the chat
+          const humanMessages: ChatMessage[] = data.newMessages.map((msg: any) => ({
+            role: 'assistant',
+            content: `👨‍💼 Marc: ${msg.message}`,
+            timestamp: msg.created_at
+          }));
+
+          setMessages(prev => [...prev, ...humanMessages]);
+          setLastPollTime(data.newMessages[data.newMessages.length - 1].created_at);
+        }
+      } catch (error) {
+        console.error('Polling error:', error);
+      }
+    }, 3000); // Poll every 3 seconds
+
+    return () => clearInterval(pollInterval);
+  }, [userId, lastPollTime]);
 
   // Load conversation history on mount
   useEffect(() => {

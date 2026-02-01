@@ -9,6 +9,7 @@ const bot = new TelegramBot(token);
 export async function POST(request: NextRequest) {
     try {
         const update = await request.json();
+        console.log('📥 Telegram webhook received:', JSON.stringify(update, null, 2));
 
         // Handle callback queries (button clicks)
         if (update.callback_query) {
@@ -17,7 +18,10 @@ export async function POST(request: NextRequest) {
             const messageId = callbackQuery.message.message_id;
             const chatId = callbackQuery.message.chat.id;
 
-            const [action, conversationId] = data.split('_');
+            console.log('🔘 Button clicked:', data);
+
+            const [action, ...rest] = data.split('_');
+            const conversationId = rest.join('_'); // Handle conversation IDs with underscores
 
             switch (action) {
                 case 'takeover':
@@ -33,19 +37,58 @@ export async function POST(request: NextRequest) {
                     await handleViewHistory(conversationId, chatId);
                     break;
                 case 'template':
-                    const templateType = data.split('_')[1];
-                    await handleTemplate(conversationId, templateType, chatId, messageId);
+                    const templateType = rest[0];
+                    const templateConvId = rest.slice(1).join('_');
+                    await handleTemplate(templateConvId, templateType, chatId, messageId);
                     break;
+                case 'back':
+                    // Restore original buttons
+                    await bot.editMessageReplyMarkup(
+                        {
+                            inline_keyboard: [
+                                [
+                                    { text: '✅ Take Over', callback_data: `takeover_${conversationId}` },
+                                    { text: '📝 Quick Reply', callback_data: `reply_${conversationId}` }
+                                ],
+                                [
+                                    { text: '✔️ Mark Resolved', callback_data: `resolve_${conversationId}` },
+                                    { text: '📊 View Full History', callback_data: `history_${conversationId}` }
+                                ],
+                                [
+                                    { text: '💼 Business Inquiry', callback_data: `template_business_${conversationId}` },
+                                    { text: '🤝 Collaboration', callback_data: `template_collab_${conversationId}` }
+                                ]
+                            ]
+                        },
+                        {
+                            chat_id: chatId,
+                            message_id: messageId
+                        }
+                    );
+                    break;
+                default:
+                    console.log('⚠️ Unknown action:', action);
             }
 
             // Answer callback query to remove loading state
-            await bot.answerCallbackQuery(callbackQuery.id);
+            await bot.answerCallbackQuery(callbackQuery.id, {
+                text: '✅ Action processed'
+            });
+        }
+
+        // Handle direct message replies
+        if (update.message && update.message.reply_to_message) {
+            console.log('💬 Direct reply received');
+            await handleDirectReply(update.message);
         }
 
         return NextResponse.json({ ok: true });
     } catch (error) {
-        console.error('Telegram webhook error:', error);
-        return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
+        console.error('❌ Telegram webhook error:', error);
+        return NextResponse.json({
+            error: 'Webhook processing failed',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        }, { status: 500 });
     }
 }
 
@@ -179,3 +222,96 @@ async function handleTemplate(conversationId: string, templateType: string, chat
         }
     );
 }
+
+async function handleDirectReply(message: any) {
+    try {
+        const replyText = message.text;
+        const chatId = message.chat.id;
+        const originalMessage = message.reply_to_message.text;
+
+        console.log('📝 Reply text:', replyText);
+        console.log('📄 Original message:', originalMessage);
+
+        // Extract conversation ID from the original message
+        const match = originalMessage.match(/Conversation ID: `([^`]+)`/);
+
+        if (!match) {
+            console.log('⚠️ Could not extract conversation ID from message');
+            await bot.sendMessage(
+                chatId,
+                '❌ Could not find conversation ID. Please use the buttons to respond.',
+                { reply_to_message_id: message.message_id }
+            );
+            return;
+        }
+
+        const conversationId = match[1];
+        console.log('🆔 Conversation ID:', conversationId);
+
+        // Check if conversation exists and is active
+        const { data: conversation, error: convError } = await supabaseAdmin
+            .from('conversations')
+            .select('id, status, user_name')
+            .eq('id', conversationId)
+            .single();
+
+        if (convError || !conversation) {
+            console.error('❌ Conversation not found:', convError);
+            await bot.sendMessage(
+                chatId,
+                '❌ Conversation not found or has been closed.',
+                { reply_to_message_id: message.message_id }
+            );
+            return;
+        }
+
+        // Store the human response in the database
+        const { error: insertError } = await supabaseAdmin
+            .from('messages')
+            .insert({
+                conversation_id: conversationId,
+                sender_type: 'human',
+                message: replyText
+            });
+
+        if (insertError) {
+            console.error('❌ Failed to store message:', insertError);
+            await bot.sendMessage(
+                chatId,
+                '❌ Failed to send message. Please try again.',
+                { reply_to_message_id: message.message_id }
+            );
+            return;
+        }
+
+        // Update conversation status to show human is active
+        await supabaseAdmin
+            .from('conversations')
+            .update({
+                status: 'human_active',
+                updated_at: new Date().toISOString()
+            })
+            .eq('id', conversationId);
+
+        // Send confirmation
+        await bot.sendMessage(
+            chatId,
+            `✅ *Message sent to ${conversation.user_name || 'user'}!*\n\n"${replyText}"`,
+            {
+                parse_mode: 'Markdown',
+                reply_to_message_id: message.message_id
+            }
+        );
+
+        console.log('✅ Direct reply processed successfully');
+
+    } catch (error) {
+        console.error('❌ Error handling direct reply:', error);
+        await bot.sendMessage(
+            message.chat.id,
+            '❌ An error occurred. Please try again or use the template buttons.',
+            { reply_to_message_id: message.message_id }
+        );
+    }
+}
+
