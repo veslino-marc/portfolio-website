@@ -285,7 +285,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
           if (msg.role === 'system') {
             return (
               <div key={index} className="flex justify-center animate-fadeIn">
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 text-blue-800 px-4 py-3 rounded-xl shadow-sm max-w-[90%] text-center">
+                <div className="bg-gradient-to-r from-amber-50 via-rose-50 to-purple-100 border-2 border-purple-200 text-gray-800 px-4 py-3 rounded-xl shadow-sm max-w-[90%] text-center">
                   <p className="text-sm font-medium">{msg.content}</p>
                 </div>
               </div>
@@ -298,24 +298,24 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
               <div key={index} className="flex justify-start animate-fadeIn">
                 <div className="flex flex-col items-start max-w-[85%]">
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-purple-300">
+                    <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-gray-300">
                       <Image
-                        src="/android-chrome-512x512.png"
+                        src="/assets/profile-image.jpg"
                         alt="Marc"
                         width={24}
                         height={24}
                         className="object-cover"
                       />
                     </div>
-                    <span className="text-xs font-semibold text-purple-700 flex items-center gap-1">
+                    <span className="text-xs font-semibold text-black flex items-center gap-1">
                       Marc Vesliño
-                      <svg className="w-3 h-3 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
                     </span>
                   </div>
-                  <div className="group relative p-3 rounded-2xl rounded-tl-none shadow-md bg-gradient-to-br from-amber-50 via-rose-50 to-purple-100 text-gray-900 border border-purple-200">
-                    <p className="text-sm whitespace-pre-wrap leading-relaxed font-medium">{msg.content}</p>
+                  <div className="group relative p-3 rounded-2xl rounded-tl-none shadow-sm bg-gradient-to-r from-amber-50 via-rose-50 to-purple-100 text-gray-900 border border-gray-200">
+                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.content}</p>
                     
                     {/* Copy button */}
                     <button
@@ -383,21 +383,21 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
         {isHumanTyping && (
           <div className="flex justify-start animate-fadeIn">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-purple-300">
+              <div className="w-6 h-6 rounded-full overflow-hidden border-2 border-gray-300">
                 <Image
-                  src="/android-chrome-512x512.png"
+                  src="/assets/profile-image.jpg"
                   alt="Marc"
                   width={24}
                   height={24}
                   className="object-cover"
                 />
               </div>
-              <div className="bg-gradient-to-br from-amber-50 via-rose-50 to-purple-100 border border-purple-200 px-4 py-3 rounded-2xl rounded-tl-none shadow-md">
+              <div className="bg-gradient-to-r from-amber-50 via-rose-50 to-purple-100 border border-gray-200 px-4 py-3 rounded-2xl rounded-tl-none shadow-sm">
                 <div className="flex gap-1.5 items-center">
                   <span className="text-xs font-medium mr-2 text-gray-900">Marc is typing</span>
-                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
-                  <div className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                  <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                  <div className="w-2 h-2 bg-gray-600 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
                 </div>
               </div>
             </div>
