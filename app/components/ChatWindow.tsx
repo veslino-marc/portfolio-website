@@ -60,7 +60,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
           const humanMessages: ChatMessage[] = data.newMessages.map((msg: any) => ({
             role: 'assistant',
             content: `👨‍💼 Marc: ${msg.message}`,
-            timestamp: msg.created_at
+            timestamp: new Date().toISOString() // Use current time instead of DB timestamp
           }));
 
           setMessages(prev => [...prev, ...humanMessages]);
