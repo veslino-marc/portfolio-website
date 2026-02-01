@@ -77,9 +77,21 @@ export async function POST(request: NextRequest) {
         }
 
         // Handle direct message replies
-        if (update.message && update.message.reply_to_message) {
-            console.log('💬 Direct reply received');
-            await handleDirectReply(update.message);
+        if (update.message) {
+            console.log('� Message received');
+            console.log('   Has reply_to_message:', !!update.message.reply_to_message);
+            console.log('   Text:', update.message.text);
+
+            if (update.message.reply_to_message) {
+                console.log('💬 This is a reply');
+                console.log('📄 Reply to message:', update.message.reply_to_message.text);
+
+                if (update.message.text) {
+                    await handleDirectReply(update.message);
+                } else {
+                    console.log('⚠️ Message has no text');
+                }
+            }
         }
 
         return NextResponse.json({ ok: true });
