@@ -171,12 +171,16 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
       const data = await response.json();
 
       if (data.success) {
-        const aiMessage: ChatMessage = {
-          role: 'assistant',
-          content: data.response,
-          timestamp: new Date().toISOString()
-        };
-        setMessages(prev => [...prev, aiMessage]);
+        // Only add message if it's not a silent response
+        if (data.response && !data.silent) {
+          const aiMessage: ChatMessage = {
+            role: 'assistant',
+            content: data.response,
+            timestamp: new Date().toISOString()
+          };
+          setMessages(prev => [...prev, aiMessage]);
+        }
+        // If silent, the message was just forwarded to Marc without showing a response
       } else {
         throw new Error('Failed to get response');
       }

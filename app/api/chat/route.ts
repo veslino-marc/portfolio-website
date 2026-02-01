@@ -41,11 +41,44 @@ export async function POST(request: NextRequest) {
                         message: message
                     });
 
+                // Check if this is the first message after human takeover
+                const { data: recentMessages } = await supabaseAdmin
+                    .from('messages')
+                    .select('sender_type')
+                    .eq('conversation_id', conversation.id)
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+
+                // Only show the "Marc will respond" message if we haven't shown it recently
+                const hasRecentHumanNotification = recentMessages?.some(
+                    (msg, index) => index > 0 && msg.sender_type === 'system'
+                );
+
+                if (!hasRecentHumanNotification) {
+                    // Save a system message so we know we've notified
+                    await supabaseAdmin
+                        .from('messages')
+                        .insert({
+                            conversation_id: conversation.id,
+                            sender_type: 'system',
+                            message: 'Marc will respond to you shortly...'
+                        });
+
+                    return NextResponse.json({
+                        success: true,
+                        response: "Marc will respond to you shortly...",
+                        conversationId: conversation.id,
+                        humanActive: true
+                    });
+                }
+
+                // After first notification, just acknowledge silently
                 return NextResponse.json({
                     success: true,
-                    response: "Marc will respond to you shortly...",
+                    response: null, // No visible message
                     conversationId: conversation.id,
-                    humanActive: true
+                    humanActive: true,
+                    silent: true
                 });
             }
 
