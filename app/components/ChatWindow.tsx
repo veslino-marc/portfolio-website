@@ -263,7 +263,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
         <div className="flex items-center gap-2">
           <button
             onClick={clearChat}
-            className="hover:bg-gray-800 p-2 rounded-full transition-colors"
+            className="hover:bg-gray-800 p-2 rounded-full transition-colors cursor-pointer"
             title="Clear chat"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -272,7 +272,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
           </button>
           <button
             onClick={onClose}
-            className="hover:bg-gray-800 p-2 rounded-full transition-colors"
+            className="hover:bg-gray-800 p-2 rounded-full transition-colors cursor-pointer"
             title="Close chat"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -324,7 +324,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
                     {/* Copy button */}
                     <button
                       onClick={() => copyMessage(msg.content, index)}
-                      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600"
+                      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600 cursor-pointer"
                       title="Copy message"
                     >
                       {copiedIndex === index ? (
@@ -363,7 +363,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
                   {/* Copy button */}
                   <button
                     onClick={() => copyMessage(msg.content, index)}
-                    className={`absolute -top-2 ${msg.role === 'user' ? '-left-2' : '-right-2'} opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600`}
+                    className={`absolute -top-2 ${msg.role === 'user' ? '-left-2' : '-right-2'} opacity-0 group-hover:opacity-100 transition-opacity bg-gray-700 text-white p-1.5 rounded-full shadow-lg hover:bg-gray-600 cursor-pointer`}
                     title="Copy message"
                   >
                     {copiedIndex === index ? (
@@ -430,7 +430,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
                 <button
                   key={index}
                   onClick={() => handleQuickReply(reply)}
-                  className="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-full hover:border-black hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow"
+                  className="text-xs bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-full hover:border-black hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow cursor-pointer"
                 >
                   {reply}
                 </button>
@@ -459,7 +459,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
             {input && (
               <button
                 onClick={() => setInput('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -470,7 +470,7 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
           <button
             onClick={() => sendMessage()}
             disabled={isLoading || !input.trim()}
-            className="bg-gradient-to-r from-gray-900 to-black text-white p-3 rounded-full hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none transform hover:scale-105 active:scale-95"
+            className="bg-gradient-to-r from-gray-900 to-black text-white p-3 rounded-full hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none transform hover:scale-105 active:scale-95 cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -501,13 +501,13 @@ const ChatWindow = ({ onClose }: ChatWindowProps) => {
           <div className="flex gap-3">
             <button
               onClick={() => setShowClearConfirm(false)}
-              className="flex-1 px-4 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="flex-1 px-4 py-2.5 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium cursor-pointer"
             >
               Cancel
             </button>
             <button
               onClick={confirmClearChat}
-              className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+              className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium cursor-pointer"
             >
               Clear Chat
             </button>
