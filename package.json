@@ -12,6 +12,7 @@
     "@google/generative-ai": "^0.24.1",
     "@supabase/supabase-js": "^2.93.3",
     "dotenv": "^17.2.3",
+    "groq-sdk": "^0.37.0",
     "next": "16.1.4",
     "node-telegram-bot-api": "^0.67.0",
     "react": "19.2.3",
