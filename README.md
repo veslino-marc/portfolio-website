@@ -285,4 +285,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-Built with by Marc Vesliño | Powered by Next.js, Groq AI (Llama 3.3) for Chatbot Ai, and Supabase
+Built with by Marc Vesliño | Powered by Next.js, Groq AI (Llama 3.3) for Chatbot Ai, and Supabase for the database.
