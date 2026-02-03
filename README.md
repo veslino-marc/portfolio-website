@@ -34,7 +34,7 @@ A modern, responsive portfolio website showcasing my projects, skills, and exper
 - **Deployment:** Vercel
 
 ### Chatbot & Backend
-- **AI:** Google Gemini 2.0 Flash
+- **AI:** Groq (Llama 3.3 70B) - Fast, free, and reliable
 - **Database:** Supabase (PostgreSQL)
 - **Notifications:** Telegram Bot API
 - **Form Handling:** Web3Forms API
@@ -77,7 +77,7 @@ portfolio-website/
 │   │   ├── Skills.tsx         # Skills section
 │   │   └── Contact.tsx        # Contact form
 │   ├── lib/
-│   │   ├── gemini.ts          # AI logic
+│   │   ├── groq.ts            # Groq AI integration
 │   │   ├── escalation.ts      # Smart escalation
 │   │   ├── telegram.ts        # Telegram notifications
 │   │   └── supabase.ts        # Database client
@@ -102,7 +102,7 @@ portfolio-website/
 - Node.js 18+ installed
 - npm or yarn package manager
 - Supabase account (for chatbot)
-- Google AI Studio API key (for chatbot)
+- Groq API key (for AI chatbot - free, no credit card required)
 - Telegram Bot Token (for notifications)
 
 ### Installation
@@ -123,8 +123,8 @@ npm install
 Create a `.env.local` file in the root directory:
 
 ```env
-# Gemini AI
-GEMINI_API_KEY=your_gemini_api_key
+# Groq AI (Free - Get your key at https://console.groq.com/)
+GROQ_API_KEY=your_groq_api_key
 
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
@@ -138,6 +138,13 @@ TELEGRAM_CHAT_ID=your_chat_id
 # Web3Forms (Contact Form)
 NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_key
 ```
+
+**Getting Your Groq API Key:**
+1. Go to [https://console.groq.com/](https://console.groq.com/)
+2. Sign up (free, no credit card required)
+3. Navigate to "API Keys"
+4. Click "Create API Key"
+5. Copy the key (starts with `gsk_...`)
 
 4. **Setup Database**
 
@@ -180,11 +187,14 @@ The chatbot automatically escalates to Telegram when:
 - Webhook support for button interactions
 
 ### AI Capabilities
+- Powered by **Groq's Llama 3.3 70B** model
+- Lightning-fast responses (faster than ChatGPT)
 - Answers questions about projects, skills, and experience
 - Remembers conversation context
 - Provides relevant follow-up responses
 - Handles 6 projects comprehensively
 - Detects hiring/collaboration opportunities
+- **100% Free** with generous limits (14,400 requests/day)
 
 ## 🧪 Testing Telegram Buttons
 
@@ -229,15 +239,32 @@ Detailed documentation available in the `documentation/` folder:
 ## 🔧 Configuration
 
 ### Chatbot Customization
-Edit `app/lib/gemini.ts` to customize:
-- AI responses
+Edit `app/lib/groq.ts` to customize:
+- AI responses and behavior
+- System prompts and context
 - Fallback messages
-- Context awareness rules
+- Model selection (Llama 3.3 70B, Llama 3.1, etc.)
 
 Edit `app/lib/escalation.ts` to customize:
 - Escalation triggers
 - Confidence thresholds
 - Urgency levels
+
+### Monitoring Usage
+Check your Groq API usage:
+```bash
+# View usage from your database
+npx tsx scripts/check-groq-usage.ts
+
+# Or check the official dashboard
+# https://console.groq.com/usage
+```
+
+**Groq Free Tier Limits:**
+- 30 requests per minute
+- 14,400 requests per day
+- Unlimited tokens
+- 100% free forever!
 
 ### UI Customization
 Edit `app/components/ChatWindow.tsx` to customize:
@@ -258,4 +285,4 @@ This project is open source and available under the MIT License.
 
 ---
 
-Built with ❤️ by Marc Vesliño | Powered by Next.js, Gemini AI, and Supabase
+Built with by Marc Vesliño | Powered by Next.js, Groq AI (Llama 3.3) for Chatbot Ai, and Supabase

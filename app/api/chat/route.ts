@@ -1,7 +1,7 @@
 // API route to handle user messages and AI responses
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/app/lib/supabase';
-import { generateAIResponse } from '@/app/lib/gemini';
+import { generateAIResponse } from '@/app/lib/groq'; // Changed from gemini to groq
 import { sendSmartTelegramNotification } from '@/app/lib/telegram';
 import { analyzeEscalation, calculateConfidenceScore } from '@/app/lib/escalation';
 
